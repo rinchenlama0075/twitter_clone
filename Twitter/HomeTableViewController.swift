@@ -16,6 +16,8 @@ class HomeTableViewController: UITableViewController {
         UserDefaults.standard.set(false, forKey: "userLoggedIn")
     }
     
+    @IBOutlet var tweetTableBig: UITableView!
+//    @IBOutlet weak var tweetTable: TweetCellTableViewCell!
     var tweetArray = [NSDictionary]()
     var numberOfTweet : Int!
     
@@ -27,6 +29,15 @@ class HomeTableViewController: UITableViewController {
         loadTweet()
         myRefreshControl.addTarget(self, action: #selector(loadTweet), for: .valueChanged)
         tableView.refreshControl = myRefreshControl
+//        self.tweetTableBig.rowHeight = UITableView.automaticDimension
+//        self.tweetTableBig.estimatedRowHeight = 150
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath)->CGFloat{
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 150
+        return self.tableView.rowHeight
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,6 +70,10 @@ class HomeTableViewController: UITableViewController {
         if let imageData = data{
             cell.profileImageView.image = UIImage(data: imageData)
         }
+        cell.setFavorite(tweetArray[indexPath.row]["favorited"] as! Bool)
+        cell.setRetweeted(tweetArray[indexPath.row]["retweeted"] as! Bool)
+        cell.tweetId = tweetArray[indexPath.row]["id"] as! Int
+        
         return cell
     }
 
@@ -95,6 +110,8 @@ class HomeTableViewController: UITableViewController {
             loadMoreTweets()
         }
     }
+    
+    
 
 
     
